@@ -208,7 +208,7 @@ func deleteFile() {
         defer file.Close()
     
         // Write bytes to file
-        byteSlice := []byte("Bytes!\n")
+        byteSlice := []byte("Welcome to IO package in Go !\n")
         bytesWritten, err := file.Write(byteSlice)
         if err != nil {
             log.Fatal(err)
@@ -249,7 +249,7 @@ func deleteFile() {
         // Write string to buffer
         // Also available are WriteRune() and WriteByte()   
         bytesWritten, err = bufferedWriter.WriteString(
-            "Buffered string\n",
+            "\tBuffered string\n",
         )
         if err != nil {
             log.Fatal(err)
@@ -305,7 +305,7 @@ func deleteFile() {
         log.Printf("Available buffer: %d\n", bytesAvailable)
     }
 
-    func readInBytes() {
+ func readInBytes() {
         // Open file for reading
         file, err := os.Open("test.txt")
         if err != nil {
@@ -324,22 +324,83 @@ func deleteFile() {
         log.Printf("Number of bytes read: %d\n", bytesRead)
         log.Printf("Data read: %s\n", byteSlice)
     }
-func main(){
-      createEmptyFile()
-         truncateFile()
-        getFileInfo()
-        renameFile()
-
-       deleteFile()
-       
-      createEmptyFile()
-       openAndClose()
-       CheckFileExists()
-       checkRWPermission()
-       changeOwnerShip()
-       writeBytes()
-       copyOneFileToAnother()
-       ioutilWritter()
-       bufIoWrting()
-
+ func readNBytesFile(){  
+        file,err:=os.Open("test.txt")
+               if err!=nil{
+                   log.Println(err)
+               }
+               defer file.Close()
+               //make a N byte slice 
+              // Read up to len(b) bytes from the File
+              // Zero bytes written means end of file
+              // End of file returns error type io.EOF
+               bytesSlice:=make([]byte,16)
+               bytesRead,err:=file.Read(bytesSlice)
+               if err!=nil{
+                   log.Println(err,"Error occur")
+               }
+               log.Println("No. of bytes read",bytesRead)
+               log.Println("Data Read:-",bytesSlice)
+    }
+    
+  func read_ExctalyNBytes_File(){
+        file,err:=os.Open("test.txt")
+        if err!=nil{
+            log.Println("Error:- at Open file ",err)
+        }
+        // The file.Read() function will happily read a tiny file in to a large
+        // byte slice, but io.ReadFull() will return an
+        // error if the file is smaller than the byte slice.
+        bytesSlice:=make([]byte,2)
+        numberBytesRead,err:=io.ReadFull(file,bytesSlice)
+        if err!=nil{
+            log.Println("File content less than byteBuffer",err)
+        }
+        log.Println("No of bytes read:-",numberBytesRead)
+        log.Println("Data read:-",bytesSlice)
+    
+    }
+ func atLeastNBytesFileRead(){
+        file,err:=os.Open("test.txt")
+        if err!=nil{
+            log.Println(err)
+        }
+        byteSlice :=make([]byte,512)
+        minBytes:=8
+        numberBytesRead,err:=io.ReadAtLeast(file,byteSlice,minBytes)
+        if err!=nil{
+            log.Println(err)
+        }
+        log.Println("Number of bytes read:-",numberBytesRead)
+        log.Println("DATA---",byteSlice)
+    }
+func quickRead(){
+        // Read file to byte slice
+        data, err := ioutil.ReadFile("test.txt")
+        if err != nil {
+            log.Fatal(err)
+        }
+    
+        log.Printf("Data read: %s\n", data)
+    
 }
+ func main(){
+	createEmptyFile()
+	truncateFile()
+	getFileInfo()
+	renameFile()
+	deleteFile() 
+	createEmptyFile()
+	openAndClose()
+	CheckFileExists()
+	checkRWPermission()
+	changeOwnerShip()
+	writeBytes()
+	copyOneFileToAnother()
+	ioutilWritter()
+	bufIoWrting()
+	readNBytesFile()
+	read_ExctalyNBytes_File()
+	atLeastNBytesFileRead()
+    quickRead()
+ } 
