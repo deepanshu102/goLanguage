@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type Article struct {
@@ -25,10 +27,10 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Entpoint hit:Homepage")
 }
 func handleRequest() {
-
-	http.HandleFunc("/", homePage)
-	http.HandleFunc("/articles", returnAllArticles)
-	log.Fatal(http.ListenAndServe(":8090", nil))
+	myRouter := mux.NewRouter().StrictSlash(true)
+	myRouter.HandleFunc("/", homePage)
+	myRouter.HandleFunc("/articles", returnAllArticles)
+	log.Fatal(http.ListenAndServe(":8090", myRouter))
 }
 func main() {
 	Articles = append(Articles,
