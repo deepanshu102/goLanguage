@@ -2,9 +2,9 @@
 <ul>
     {{range .Todos}}
         {{if .Done}}
-            <li class="done">{{.Title}}</li>
+            <li class="done">{{.Done}}  {{.Title}}</li>
         {{else}}
-            <li>{{.Title}}</li>
+            <li>{{.Title}}  {{.Done}}</li>
         {{end}}
     {{end}}
 </ul>
